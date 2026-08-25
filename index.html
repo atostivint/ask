@@ -139,6 +139,14 @@
   }
   .hint { font-size: 12.5px; color: var(--muted); }
   .prompt-foot .btn { padding: 10px 20px; font-size: 15px; }
+  .q-warning {
+    display: none; margin-top: 12px;
+    font-size: 13.5px; color: var(--text);
+    background: rgba(254, 188, 46, .08); border: 1px solid rgba(254, 188, 46, .45);
+    border-radius: 10px; padding: 10px 14px;
+  }
+  .q-warning.show { display: block; }
+  .q-warning a { color: var(--accent); font-weight: 600; }
   .suggest-label { margin: 20px 0 10px; font-size: 13px; color: var(--muted); }
   .suggestions { display: flex; flex-wrap: wrap; gap: 8px; max-width: 760px; }
   .suggestion {
@@ -260,6 +268,11 @@
       <span class="hint">Votre message arrive directement dans la boîte de réception d'Alexandre. Réponse humaine, sous quelques heures.</span>
       <button id="q-send" class="btn btn-primary" type="button">Envoyer ➤</button>
     </div>
+    <p class="q-warning" id="q-warning" role="alert">
+      ⚠️ Impossible de remettre ce message&nbsp;: notre outil de chat est bloqué par votre navigateur.
+      <a href="https://www.linkedin.com/in/alexandretostivint/" target="_blank" rel="noopener">Passez par LinkedIn</a>,
+      ou <a href="#contact">utilisez les autres contacts</a>.
+    </p>
   </div>
   <p class="suggest-label">Pas d'inspiration&nbsp;? Essayez&nbsp;:</p>
   <div class="suggestions">
@@ -280,6 +293,7 @@
     </div>
     <div class="term-body">
       <iframe
+        id="chat-frame"
         src="https://go.crisp.chat/chat/embed/?website_id=-K4rlGkym4Yw7OXHl99n"
         title="Chat avec Alexandre Tostivint"
         loading="lazy"
@@ -351,12 +365,20 @@
   document.head.appendChild(st);
 
   var crispReady = false;
+  var crispBlocked = false;
   var pendingMessage = null;
+
+  function hideFallbacks() {
+    var fb = document.getElementById("chat-fallback");
+    var qw = document.getElementById("q-warning");
+    if (fb && fb.classList.contains("show")) fb.classList.remove("show");
+    if (qw && qw.classList.contains("show")) qw.classList.remove("show");
+  }
 
   window.CRISP_READY_TRIGGER = function () {
     crispReady = true;
-    var fb = document.getElementById("chat-fallback");
-    if (fb && fb.classList.contains("show")) fb.classList.remove("show");
+    crispBlocked = false;
+    hideFallbacks();
     if (pendingMessage !== null) {
       try { $crisp.push(["do", "message:send", ["text", pendingMessage]]); } catch (e) {}
       pendingMessage = null;
@@ -371,8 +393,11 @@
   setTimeout(function () {
     var loaded = crispReady || document.querySelector(".crisp-client") !== null;
     if (!loaded) {
+      crispBlocked = true;
       var fb = document.getElementById("chat-fallback");
+      var qw = document.getElementById("q-warning");
       if (fb) fb.classList.add("show");
+      if (qw) qw.classList.add("show");
     }
   }, 4000);
 
@@ -387,11 +412,31 @@
       pendingMessage = text; /* sera envoyé dès que Crisp aura fini de charger */
     }
     openChat();
+    /* Synchronise la fenêtre embarquée sur CETTE conversation :
+       on récupère le session_id et on recharge l'iframe avec crisp_sid. */
+    setTimeout(function () {
+      try {
+        var sid = $crisp.get && $crisp.get("session:id");
+        if (sid) {
+          var frame = document.getElementById("chat-frame");
+          frame.src = "https://go.crisp.chat/chat/embed/?website_id=" +
+            encodeURIComponent(window.CRISP_WEBSITE_ID) + "&crisp_sid=" +
+            encodeURIComponent(sid);
+        }
+      } catch (e) {}
+    }, 1200);
   }
 
   function submitQuestion() {
     var text = (input.value || "").trim();
     if (!text) { input.focus(); return; }
+    if (crispBlocked) {
+      /* On ne ment pas : le message n'est pas parti. Le texte reste dans le champ,
+         prêt à être copié vers LinkedIn ou un autre canal. */
+      document.getElementById("q-warning").classList.add("show");
+      input.focus();
+      return;
+    }
     deliver(text);
     input.value = "";
     sendBtn.textContent = "Envoyé ✓";

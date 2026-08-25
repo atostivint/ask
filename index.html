@@ -113,6 +113,40 @@
   .facts li:last-child { border-bottom: none; }
   .facts .k { color: var(--muted); }
   .facts .v { font-weight: 600; text-align: right; }
+  /* Champ façon ChatGPT */
+  .prompt-box {
+    background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+    padding: 18px; max-width: 760px;
+    box-shadow: 0 10px 36px rgba(0, 0, 0, .30);
+    transition: border-color .2s ease, box-shadow .2s ease;
+  }
+  .prompt-box:focus-within {
+    border-color: rgba(79, 143, 247, .65);
+    box-shadow: 0 10px 40px rgba(79, 143, 247, .16);
+  }
+  .prompt-head { font-size: 13px; color: var(--muted); margin-bottom: 10px; letter-spacing: .3px; }
+  #q-input {
+    width: 100%; min-height: 88px; resize: vertical;
+    background: var(--bg); border: 1px solid var(--border); border-radius: 10px;
+    color: var(--text); font-family: inherit; font-size: 15px; line-height: 1.55;
+    padding: 12px 14px;
+  }
+  #q-input:focus { outline: none; border-color: var(--accent); }
+  #q-input::placeholder { color: #6a737d; }
+  .prompt-foot {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px; margin-top: 12px; flex-wrap: wrap;
+  }
+  .hint { font-size: 12.5px; color: var(--muted); }
+  .prompt-foot .btn { padding: 10px 20px; font-size: 15px; }
+  .suggest-label { margin: 20px 0 10px; font-size: 13px; color: var(--muted); }
+  .suggestions { display: flex; flex-wrap: wrap; gap: 8px; max-width: 760px; }
+  .suggestion {
+    font-family: inherit; font-size: 13.5px; color: var(--text);
+    background: var(--card); border: 1px solid var(--border); border-radius: 999px;
+    padding: 7px 15px; cursor: pointer; text-align: left;
+  }
+  .suggestion:hover { border-color: var(--accent); color: var(--accent); }
   /* Chat embarqué */
   .terminal { background: var(--card); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
   .term-bar {
@@ -126,11 +160,21 @@
   .term-title { margin-left: 8px; flex: 1; }
   .term-status { color: #3fb950; font-size: 12px; }
   .term-status::before { content: "●"; margin-right: 6px; }
+  .term-body { position: relative; }
   .terminal iframe {
-    display: block; width: 100%; height: 560px; border: 0; background: var(--bg);
+    display: block; width: 100%; height: 500px; border: 0; background: var(--bg);
   }
+  .chat-fallback {
+    position: absolute; inset: 0; display: none;
+    flex-direction: column; align-items: center; justify-content: center;
+    gap: 14px; text-align: center; padding: 28px;
+  }
+  .chat-fallback.show { display: flex; }
+  .chat-fallback h3 { font-size: 19px; }
+  .chat-fallback p { color: var(--muted); font-size: 14.5px; max-width: 460px; }
+  .fallback-actions { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+  .fallback-actions .btn { padding: 11px 22px; font-size: 15px; }
   .term-note { font-size: 12.5px; color: var(--muted); padding: 10px 14px; border-top: 1px solid var(--border); }
-  .term-note a { color: var(--accent); }
   footer { padding: 40px 0 64px; color: var(--muted); font-size: 13.5px; border-top: 1px solid var(--border); }
   footer a { color: var(--muted); }
   .collab {
@@ -159,7 +203,7 @@
       <span class="chip"><b>Coût</b> un café</span>
     </div>
     <div class="cta-row">
-      <a class="btn btn-primary" href="#chat">Poser une question 💬</a>
+      <a class="btn btn-primary" href="#ask">Poser une question 💬</a>
       <a class="btn btn-ghost" href="#contact">Voir les coordonnées</a>
     </div>
   </div>
@@ -206,22 +250,52 @@
   </ul>
 </section>
 
+<section class="wrap" id="ask">
+  <h2>Posez votre question <small>Comme un prompt&nbsp;: écrivez, envoyez. Alexandre répond en personne.</small></h2>
+  <div class="prompt-box">
+    <div class="prompt-head">💬 Message à Alexandre</div>
+    <textarea id="q-input" rows="3" aria-label="Votre question"
+              placeholder="Écrivez votre question ici… (Entrée pour envoyer, Maj+Entrée pour aller à la ligne)"></textarea>
+    <div class="prompt-foot">
+      <span class="hint">Votre message arrive directement dans la boîte de réception d'Alexandre. Réponse humaine, sous quelques heures.</span>
+      <button id="q-send" class="btn btn-primary" type="button">Envoyer ➤</button>
+    </div>
+  </div>
+  <p class="suggest-label">Pas d'inspiration&nbsp;? Essayez&nbsp;:</p>
+  <div class="suggestions">
+    <button class="suggestion" type="button">Comment réduire ma facture AWS sans casser la prod&nbsp;?</button>
+    <button class="suggestion" type="button">Quelles certifs viser pour devenir architecte cloud&nbsp;?</button>
+    <button class="suggestion" type="button">Comment structurer une landing zone multi-comptes&nbsp;?</button>
+    <button class="suggestion" type="button">Vous êtes ouvert aux opportunités&nbsp;? 👀</button>
+  </div>
+</section>
+
 <section class="wrap" id="chat">
-  <h2>Session interactive <small>Le chat est ici, directement dans la page. Pas de redirection.</small></h2>
+  <h2>Session interactive <small>Votre conversation s'ouvre ici, directement dans la page.</small></h2>
   <div class="terminal">
     <div class="term-bar">
       <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
       <span class="term-title">alexandre@tostivint: ~/questions — nouvelle session</span>
       <span class="term-status">en ligne</span>
     </div>
-    <iframe
-      src="https://go.crisp.chat/chat/embed/?website_id=-K4rlGkym4Yw7OXHl99n"
-      title="Chat avec Alexandre Tostivint"
-      loading="lazy"
-      allow="clipboard-write">
-    </iframe>
-    <p class="term-note">Le module ne s'affiche pas&nbsp;?
-       <a href="https://go.crisp.chat/chat/embed/?website_id=-K4rlGkym4Yw7OXHl99n" target="_blank" rel="noopener">Ouvrir le chat dans un nouvel onglet</a>.</p>
+    <div class="term-body">
+      <iframe
+        src="https://go.crisp.chat/chat/embed/?website_id=-K4rlGkym4Yw7OXHl99n"
+        title="Chat avec Alexandre Tostivint"
+        loading="lazy"
+        allow="clipboard-write">
+      </iframe>
+      <div class="chat-fallback" id="chat-fallback">
+        <h3>⚠️ Le chat ne s'affiche pas&nbsp;?</h3>
+        <p>Votre bloqueur de publicités ou votre navigateur masque probablement
+           notre outil de messagerie. Rassurez-vous&nbsp;: Alexandre répond aussi ailleurs.</p>
+        <div class="fallback-actions">
+          <a class="btn btn-primary" href="https://www.linkedin.com/in/alexandretostivint/" target="_blank" rel="noopener">Continuer sur LinkedIn</a>
+          <a class="btn btn-ghost" href="#contact">Voir les autres contacts</a>
+        </div>
+      </div>
+    </div>
+    <p class="term-note">Fenêtre vide ou bloquée&nbsp;? Les contacts alternatifs s'affichent directement dans le cadre ci-dessus.</p>
   </div>
 </section>
 
@@ -231,7 +305,7 @@
     <div class="card">
       <h3>💬 Chat</h3>
       <p>Messagerie instantanée, intégrée plus haut sur cette page. Une question technique, une candidature, un projet&nbsp;? Réponse sous quelques heures.</p>
-      <p style="margin-top:14px"><a class="btn btn-primary" href="#chat">Aller au chat</a></p>
+      <p style="margin-top:14px"><a class="btn btn-primary" href="#ask">Écrire un message</a></p>
     </div>
     <div class="card">
       <h3>📅 Appel</h3>
@@ -258,7 +332,85 @@
 </footer>
 
 <script type="text/javascript">
+(function () {
   document.getElementById("year").textContent = new Date().getFullYear();
+
+  /* ---- Crisp : chargement du moteur, bulle masquée (on utilise l'iframe embarquée) ---- */
+  window.$crisp = [];
+  window.CRISP_WEBSITE_ID = "-K4rlGkym4Yw7OXHl99n";
+  (function () {
+    var d = document, s = d.createElement("script");
+    s.src = "https://client.crisp.chat/l.js";
+    s.async = true;
+    d.getElementsByTagName("head")[0].appendChild(s);
+  })();
+
+  /* Masquer la bulle flottante dès maintenant (avant même son apparition) */
+  var st = document.createElement("style");
+  st.textContent = ".crisp-client { display: none !important; }";
+  document.head.appendChild(st);
+
+  var crispReady = false;
+  var pendingMessage = null;
+
+  window.CRISP_READY_TRIGGER = function () {
+    crispReady = true;
+    var fb = document.getElementById("chat-fallback");
+    if (fb && fb.classList.contains("show")) fb.classList.remove("show");
+    if (pendingMessage !== null) {
+      try { $crisp.push(["do", "message:send", ["text", pendingMessage]]); } catch (e) {}
+      pendingMessage = null;
+    }
+  };
+
+  function openChat() {
+    try { $crisp.push(["do", "chat:open"]); } catch (e) {}
+  }
+
+  /* Détection du blocage (adblocker) : après 4 s, ni moteur chargé ni DOM présent */
+  setTimeout(function () {
+    var loaded = crispReady || document.querySelector(".crisp-client") !== null;
+    if (!loaded) {
+      var fb = document.getElementById("chat-fallback");
+      if (fb) fb.classList.add("show");
+    }
+  }, 4000);
+
+  /* ---- Champ façon ChatGPT : remplir / envoyer / suggestions ---- */
+  var input = document.getElementById("q-input");
+  var sendBtn = document.getElementById("q-send");
+
+  function deliver(text) {
+    if (crispReady) {
+      try { $crisp.push(["do", "message:send", ["text", text]]); } catch (e) {}
+    } else {
+      pendingMessage = text; /* sera envoyé dès que Crisp aura fini de charger */
+    }
+    openChat();
+  }
+
+  function submitQuestion() {
+    var text = (input.value || "").trim();
+    if (!text) { input.focus(); return; }
+    deliver(text);
+    input.value = "";
+    sendBtn.textContent = "Envoyé ✓";
+    setTimeout(function () { sendBtn.textContent = "Envoyer ➤"; }, 2200);
+    document.getElementById("chat").scrollIntoView({ behavior: "smooth" });
+  }
+
+  sendBtn.addEventListener("click", submitQuestion);
+  input.addEventListener("keydown", function (e) {
+    if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); submitQuestion(); }
+  });
+
+  Array.prototype.forEach.call(document.querySelectorAll(".suggestion"), function (chip) {
+    chip.addEventListener("click", function () {
+      input.value = chip.textContent.replace(/\s+/g, " ").trim();
+      submitQuestion();
+    });
+  });
+})();
 </script>
 <script type="application/ld+json">
 {

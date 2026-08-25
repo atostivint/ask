@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Alexandre Tostivint — Senior Cloud Architect</title>
+<meta name="description" content="Architecte cloud senior (AWS, Azure, GCP). FinOps, Well-Architected, pre-sales. Posez-moi vos questions techniques, je réponds vraiment.">
+<meta property="og:title" content="Alexandre Tostivint v2.0 est disponible">
+<meta property="og:description" content="Un modèle entraîné sur 10 ans de production cloud. Actuellement en sous-charge : posez-lui vos questions.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://ask.alexandre.tostivint.bzh/">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🥖</text></svg>">
+<style>
+  :root {
+    --bg: #0d1117;
+    --card: #161b22;
+    --border: #21262d;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --accent: #4f8ff7;
+    --accent2: #7c6cf0;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6;
+  }
+  .wrap { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+  header { padding: 96px 0 64px; }
+  .badge {
+    display: inline-block; font-size: 13px; color: var(--accent);
+    border: 1px solid var(--accent); border-radius: 999px;
+    padding: 2px 12px; margin-bottom: 20px; letter-spacing: .5px;
+  }
+  h1 { font-size: clamp(32px, 6vw, 52px); line-height: 1.15; letter-spacing: -1px; }
+  h1 .grad {
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .sub { color: var(--muted); font-size: 19px; margin-top: 18px; max-width: 640px; }
+  .chips { margin-top: 26px; display: flex; flex-wrap: wrap; gap: 10px; }
+  .chip {
+    font-size: 13px; color: var(--muted);
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 8px; padding: 4px 12px;
+  }
+  .chip b { color: var(--text); font-weight: 600; }
+  .cta-row { margin-top: 34px; display: flex; flex-wrap: wrap; gap: 14px; }
+  .btn {
+    display: inline-block; padding: 13px 26px; border-radius: 10px;
+    font-size: 16px; font-weight: 600; text-decoration: none; cursor: pointer;
+    border: 1px solid transparent;
+  }
+  .btn-primary {
+    color: #fff; background: linear-gradient(90deg, var(--accent), var(--accent2));
+  }
+  .btn-primary:hover { filter: brightness(1.1); }
+  .btn-ghost { color: var(--text); background: var(--card); border-color: var(--border); }
+  .btn-ghost:hover { border-color: var(--muted); }
+  section { padding: 48px 0; border-top: 1px solid var(--border); }
+  h2 { font-size: 24px; margin-bottom: 28px; }
+  h2 small { display: block; font-size: 14px; color: var(--muted); font-weight: 400; margin-top: 4px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+  .card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 14px; padding: 22px;
+  }
+  .card h3 { font-size: 17px; margin-bottom: 8px; }
+  .card p { color: var(--muted); font-size: 14.5px; }
+  .facts { list-style: none; }
+  .facts li { padding: 14px 0; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .facts li:last-child { border-bottom: none; }
+  .facts .k { color: var(--muted); }
+  .facts .v { font-weight: 600; text-align: right; }
+  footer { padding: 40px 0 64px; color: var(--muted); font-size: 13.5px; border-top: 1px solid var(--border); }
+  footer a { color: var(--muted); }
+</style>
+</head>
+<body>
+
+<header class="wrap">
+  <span class="badge">NOUVEAU · VERSION 2.0</span>
+  <h1><span class="grad">Alexandre Tostivint</span> est disponible.</h1>
+  <p class="sub">Un modèle entraîné sur plus de dix ans de production cloud.
+     Actuellement en sous-charge&nbsp;: posez-lui vos questions techniques,
+     il vous répond lui-même. Promis, pas de hallucinations.</p>
+  <div class="chips">
+    <span class="chip"><b>Contexte</b> multicloud · AWS, Azure, GCP</span>
+    <span class="chip"><b>Latence</b> quelques heures</span>
+    <span class="chip"><b>Hallucinations</b> non</span>
+    <span class="chip"><b>Coût</b> un café</span>
+  </div>
+  <div class="cta-row">
+    <button class="btn btn-primary" id="ask-btn">Poser une question 💬</button>
+    <a class="btn btn-ghost" href="#contact">Voir les coordonnées</a>
+  </div>
+</header>
+
+<section class="wrap">
+  <h2>Spécifications du modèle <small>Ce qu'il sait faire, concrètement.</small></h2>
+  <div class="grid">
+    <div class="card">
+      <h3>☁️ Architecture cloud</h3>
+      <p>Conception et revue d'architectures AWS (cœur d'expertise), Azure et GCP.
+         Terraform, Kubernetes, CI/CD, multi-comptes, réseau, sécurité.</p>
+    </div>
+    <div class="card">
+      <h3>💰 FinOps &amp; Well-Architected</h3>
+      <p>Optimisation des coûts cloud, revues Well-Architected,
+         gouvernance et FinOps opérationnel. Là où l'argent se perd, il regarde.</p>
+    </div>
+    <div class="card">
+      <h3>🤝 Conseil &amp; pre-sales</h3>
+      <p>Accompagnement d'équipes et de clients, ateliers techniques,
+         avant-vente. Habitué à expliquer clairement des sujets compliqués.</p>
+    </div>
+  </div>
+</section>
+
+<section class="wrap">
+  <h2>Données d'entraînement <small>D'où vient le modèle.</small></h2>
+  <ul class="facts card" style="list-style:none">
+    <li><span class="k">Dernier poste</span><span class="v">DoiT International — Senior Cloud Architect, 2020–2025</span></li>
+    <li><span class="k">Clients accompagnés</span><span class="v">300+ entreprises, en avant-vente et consulting</span></li>
+    <li><span class="k">Expérience</span><span class="v">10+ ans IT dont 8+ ans cloud</span></li>
+    <li><span class="k">Certifications</span><span class="v">9, dont AWS Solutions Architect Professional et DevOps Engineer Professional</span></li>
+    <li><span class="k">Fine-tuning récent</span><span class="v">Homelab k3s, agents IA, MCP, automatisation infra</span></li>
+  </ul>
+</section>
+
+<section class="wrap" id="contact">
+  <h2>Contact <small>Trois façons d'ouvrir une session.</small></h2>
+  <div class="grid">
+    <div class="card">
+      <h3>💬 Chat</h3>
+      <p>Messagerie instantanée. Une question technique, une candidature, un projet&nbsp;? Écrivez, la réponse arrive sous quelques heures.</p>
+      <p style="margin-top:14px"><button class="btn btn-primary" id="ask-btn-2">Ouvrir le chat</button></p>
+    </div>
+    <div class="card">
+      <h3>📅 Appel</h3>
+      <p>Pour discuter architecture, opportunités ou collaboration, réservez directement un créneau.</p>
+      <p style="margin-top:14px"><a class="btn btn-ghost" href="https://calendar.app.google/bvAn3Tc2iEFjc5uX7" target="_blank" rel="noopener">Réserver un créneau</a></p>
+    </div>
+    <div class="card">
+      <h3>🔗 LinkedIn</h3>
+      <p>Le profil détaillé, les recommandations et les articles.</p>
+      <!-- TODO: remplacer par l'URL publique exacte du profil LinkedIn -->
+      <p style="margin-top:14px"><a class="btn btn-ghost" href="https://www.linkedin.com/" target="_blank" rel="noopener">Voir le profil</a></p>
+    </div>
+  </div>
+</section>
+
+<footer class="wrap">
+  <p>© <span id="year"></span> Alexandre Tostivint · ask.alexandre.tostivint.bzh</p>
+  <p style="margin-top:6px">Page statique, sans framework, sans tracker. Le seul cookie ici est celui que vous mangerez en lisant cette page. 🥖</p>
+</footer>
+
+<script type="text/javascript">
+  // --- Crisp chat ---
+  const CRISP_WEBSITE_ID = "-K4rlGkym4Yw7OXHl99n";
+  window.$crisp = [];
+  window.CRISP_WEBSITE_ID = CRISP_WEBSITE_ID;
+  (function () {
+    var d = document, s = d.createElement("script");
+    s.src = "https://client.crisp.chat/l.js";
+    s.async = 1;
+    d.getElementsByTagName("head")[0].appendChild(s);
+  })();
+
+  function openChat() {
+    if (window.$crisp && $crisp.is && $crisp.is("chat:opened") !== undefined) {
+      $crisp.push(["do", "chat:open"]);
+    } else {
+      // Fallback si le widget n'a pas chargé : lien direct vers la chatbox
+      window.open(
+        "https://go.crisp.chat/chat/embed/?website_id=" + encodeURIComponent(CRISP_WEBSITE_ID),
+        "_blank", "noopener"
+      );
+    }
+  }
+  document.getElementById("ask-btn").addEventListener("click", openChat);
+  document.getElementById("ask-btn-2").addEventListener("click", openChat);
+  document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Alexandre Tostivint",
+  "jobTitle": "Senior Cloud Architect",
+  "url": "https://ask.alexandre.tostivint.bzh/",
+  "knowsAbout": ["AWS", "Azure", "GCP", "Terraform", "Kubernetes", "FinOps", "Well-Architected", "CI/CD"],
+  "alumniOf": {"@type": "Organization", "name": "DoiT International"}
+}
+</script>
+</body>
+</html>

@@ -30,6 +30,8 @@
   }
   .wrap { max-width: 900px; margin: 0 auto; padding: 0 24px; }
   header { padding: 96px 0 64px; }
+  .hero { display: flex; gap: 48px; align-items: center; }
+  .hero-text { flex: 1; min-width: 0; }
   .badge {
     display: inline-block; font-size: 13px; color: var(--accent);
     border: 1px solid var(--accent); border-radius: 999px;
@@ -41,6 +43,11 @@
     -webkit-background-clip: text; background-clip: text; color: transparent;
   }
   .sub { color: var(--muted); font-size: 19px; margin-top: 18px; max-width: 640px; }
+  .ai-note {
+    margin-top: 18px; max-width: 640px;
+    font-size: 14px; font-style: italic; color: var(--muted);
+    border-left: 3px solid var(--accent2); padding-left: 14px;
+  }
   .chips { margin-top: 26px; display: flex; flex-wrap: wrap; gap: 10px; }
   .chip {
     font-size: 13px; color: var(--muted);
@@ -60,6 +67,37 @@
   .btn-primary:hover { filter: brightness(1.1); }
   .btn-ghost { color: var(--text); background: var(--card); border-color: var(--border); }
   .btn-ghost:hover { border-color: var(--muted); }
+  /* Portrait */
+  .portrait { flex-shrink: 0; position: relative; }
+  .portrait-frame {
+    width: 230px; aspect-ratio: 1; border-radius: 22px; padding: 3px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    box-shadow: 0 12px 40px rgba(79, 143, 247, .18);
+  }
+  .portrait-inner {
+    width: 100%; height: 100%; border-radius: 19px; overflow: hidden;
+    background: var(--card);
+    display: grid; place-items: center; position: relative;
+  }
+  .portrait-inner img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .portrait-mono {
+    font-size: 68px; font-weight: 700; letter-spacing: -2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .portrait-status {
+    position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%);
+    white-space: nowrap; font-size: 11.5px; color: #3fb950;
+    background: rgba(13, 17, 23, .85); border: 1px solid rgba(63, 185, 80, .4);
+    border-radius: 999px; padding: 2px 10px; backdrop-filter: blur(4px);
+  }
+  @media (max-width: 720px) {
+    header.hero { flex-direction: column-reverse; gap: 32px; padding-top: 64px; }
+    .portrait-frame { width: 170px; }
+    .hero-text { text-align: center; }
+    .ai-note, .chips, .cta-row { margin-left: auto; margin-right: auto; justify-content: center; }
+    .ai-note { text-align: left; }
+  }
   section { padding: 48px 0; border-top: 1px solid var(--border); }
   h2 { font-size: 24px; margin-bottom: 28px; }
   h2 small { display: block; font-size: 14px; color: var(--muted); font-weight: 400; margin-top: 4px; }
@@ -75,27 +113,64 @@
   .facts li:last-child { border-bottom: none; }
   .facts .k { color: var(--muted); }
   .facts .v { font-weight: 600; text-align: right; }
+  /* Chat embarqué */
+  .terminal { background: var(--card); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+  .term-bar {
+    display: flex; align-items: center; gap: 7px;
+    padding: 10px 14px; background: #0a0d12;
+    border-bottom: 1px solid var(--border);
+    font-size: 12.5px; color: var(--muted);
+  }
+  .term-bar .dot { width: 11px; height: 11px; border-radius: 50%; display: inline-block; }
+  .dot-r { background: #ff5f57; } .dot-y { background: #febc2e; } .dot-g { background: #28c840; }
+  .term-title { margin-left: 8px; flex: 1; }
+  .term-status { color: #3fb950; font-size: 12px; }
+  .term-status::before { content: "●"; margin-right: 6px; }
+  .terminal iframe {
+    display: block; width: 100%; height: 560px; border: 0; background: var(--bg);
+  }
+  .term-note { font-size: 12.5px; color: var(--muted); padding: 10px 14px; border-top: 1px solid var(--border); }
+  .term-note a { color: var(--accent); }
   footer { padding: 40px 0 64px; color: var(--muted); font-size: 13.5px; border-top: 1px solid var(--border); }
   footer a { color: var(--muted); }
+  .collab {
+    margin-top: 22px; padding: 16px 18px;
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+  }
+  .collab b { color: var(--text); }
+  .sig { margin-top: 14px; font-style: italic; }
 </style>
 </head>
 <body>
 
-<header class="wrap">
-  <span class="badge">NOUVEAU · VERSION 2.0</span>
-  <h1><span class="grad">Alexandre Tostivint</span> est disponible.</h1>
-  <p class="sub">Un modèle entraîné sur plus de dix ans de production cloud.
-     Actuellement en sous-charge&nbsp;: posez-lui vos questions techniques,
-     il vous répond lui-même. Promis, pas de hallucinations.</p>
-  <div class="chips">
-    <span class="chip"><b>Contexte</b> multicloud · AWS, Azure, GCP</span>
-    <span class="chip"><b>Latence</b> quelques heures</span>
-    <span class="chip"><b>Hallucinations</b> non</span>
-    <span class="chip"><b>Coût</b> un café</span>
+<header class="wrap hero">
+  <div class="hero-text">
+    <span class="badge">NOUVEAU · VERSION 2.0</span>
+    <h1><span class="grad">Alexandre Tostivint</span> est disponible.</h1>
+    <p class="sub">Un modèle entraîné sur plus de dix ans de production cloud.
+       Actuellement en sous-charge&nbsp;: posez-lui vos questions techniques,
+       il vous répond lui-même. Promis, pas de hallucinations.</p>
+    <p class="ai-note">Cette page a été générée par une intelligence artificielle.
+       L'architecte derrière, lui, n'a rien d'artificiel.</p>
+    <div class="chips">
+      <span class="chip"><b>Contexte</b> multicloud · AWS, Azure, GCP</span>
+      <span class="chip"><b>Latence</b> quelques heures</span>
+      <span class="chip"><b>Hallucinations</b> non</span>
+      <span class="chip"><b>Coût</b> un café</span>
+    </div>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="#chat">Poser une question 💬</a>
+      <a class="btn btn-ghost" href="#contact">Voir les coordonnées</a>
+    </div>
   </div>
-  <div class="cta-row">
-    <button class="btn btn-primary" id="ask-btn">Poser une question 💬</button>
-    <a class="btn btn-ghost" href="#contact">Voir les coordonnées</a>
+  <div class="portrait">
+    <!-- Photo : remplacer le contenu de .portrait-inner par <img src="photo.jpg" alt="Alexandre Tostivint"> -->
+    <div class="portrait-frame">
+      <div class="portrait-inner">
+        <span class="portrait-mono">AT</span>
+        <span class="portrait-status">● disponible pour échanger</span>
+      </div>
+    </div>
   </div>
 </header>
 
@@ -131,13 +206,32 @@
   </ul>
 </section>
 
+<section class="wrap" id="chat">
+  <h2>Session interactive <small>Le chat est ici, directement dans la page. Pas de redirection.</small></h2>
+  <div class="terminal">
+    <div class="term-bar">
+      <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
+      <span class="term-title">alexandre@tostivint: ~/questions — nouvelle session</span>
+      <span class="term-status">en ligne</span>
+    </div>
+    <iframe
+      src="https://go.crisp.chat/chat/embed/?website_id=-K4rlGkym4Yw7OXHl99n"
+      title="Chat avec Alexandre Tostivint"
+      loading="lazy"
+      allow="clipboard-write">
+    </iframe>
+    <p class="term-note">Le module ne s'affiche pas&nbsp;?
+       <a href="https://go.crisp.chat/chat/embed/?website_id=-K4rlGkym4Yw7OXHl99n" target="_blank" rel="noopener">Ouvrir le chat dans un nouvel onglet</a>.</p>
+  </div>
+</section>
+
 <section class="wrap" id="contact">
   <h2>Contact <small>Trois façons d'ouvrir une session.</small></h2>
   <div class="grid">
     <div class="card">
       <h3>💬 Chat</h3>
-      <p>Messagerie instantanée. Une question technique, une candidature, un projet&nbsp;? Écrivez, la réponse arrive sous quelques heures.</p>
-      <p style="margin-top:14px"><button class="btn btn-primary" id="ask-btn-2">Ouvrir le chat</button></p>
+      <p>Messagerie instantanée, intégrée plus haut sur cette page. Une question technique, une candidature, un projet&nbsp;? Réponse sous quelques heures.</p>
+      <p style="margin-top:14px"><a class="btn btn-primary" href="#chat">Aller au chat</a></p>
     </div>
     <div class="card">
       <h3>📅 Appel</h3>
@@ -155,33 +249,15 @@
 <footer class="wrap">
   <p>© <span id="year"></span> Alexandre Tostivint · ask.alexandre.tostivint.bzh</p>
   <p style="margin-top:6px">Page statique, sans framework, sans tracker. Le seul cookie ici est celui que vous mangerez en lisant cette page. 🥖</p>
+  <div class="collab">
+    <p><b>Transparence totale&nbsp;:</b> ce site a été co-construit avec Atlas, mon assistant IA.
+       Brief humain, génération assistée, revue et validation manuelle, déploiement Git signé.
+       Savoir orchestrer une IA, c'est aussi le métier.</p>
+    <p class="sig">Généré avec amour par Atlas 🤖 × Alexandre Tostivint ☁️</p>
+  </div>
 </footer>
 
 <script type="text/javascript">
-  // --- Crisp chat ---
-  const CRISP_WEBSITE_ID = "-K4rlGkym4Yw7OXHl99n";
-  window.$crisp = [];
-  window.CRISP_WEBSITE_ID = CRISP_WEBSITE_ID;
-  (function () {
-    var d = document, s = d.createElement("script");
-    s.src = "https://client.crisp.chat/l.js";
-    s.async = 1;
-    d.getElementsByTagName("head")[0].appendChild(s);
-  })();
-
-  function openChat() {
-    if (window.$crisp && $crisp.is && $crisp.is("chat:opened") !== undefined) {
-      $crisp.push(["do", "chat:open"]);
-    } else {
-      // Fallback si le widget n'a pas chargé : lien direct vers la chatbox
-      window.open(
-        "https://go.crisp.chat/chat/embed/?website_id=" + encodeURIComponent(CRISP_WEBSITE_ID),
-        "_blank", "noopener"
-      );
-    }
-  }
-  document.getElementById("ask-btn").addEventListener("click", openChat);
-  document.getElementById("ask-btn-2").addEventListener("click", openChat);
   document.getElementById("year").textContent = new Date().getFullYear();
 </script>
 <script type="application/ld+json">
